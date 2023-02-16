@@ -46,7 +46,7 @@ const io = require("socket.io")(server, {
   },
 });
 
-// create io connection
+// create an io connection
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
   // create a room for particular user
