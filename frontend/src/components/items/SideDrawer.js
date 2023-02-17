@@ -55,6 +55,11 @@ const SideDrawer = () => {
     history.push("/");
   };
 
+  // all user pictures and questions
+  const galleryHandler = () => {
+    history.push("/items");
+  };
+
   // search users
   const searchHandler = async () => {
     if (!search) {
@@ -184,6 +189,8 @@ const SideDrawer = () => {
               <Profile user={user}>
                 <MenuItem>My Profile</MenuItem>
               </Profile>
+              <MenuDivider />
+              <MenuItem onClick={galleryHandler}>My Gallery</MenuItem>
               <MenuDivider />
               <MenuItem onClick={logoutHandler}>Logout</MenuItem>
             </MenuList>

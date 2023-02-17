@@ -4,6 +4,8 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const itemRoutes = require("./routes/itemRoutes");
+const fileRoutes = require("./routes/fileRoutes");
 const { pageNotFound, errorHandler } = require("./handler/errorHandler");
 const path = require("path");
 
@@ -17,6 +19,8 @@ app.use(express.json());
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/item", itemRoutes);
+app.use("/api/file", fileRoutes);
 
 // deployment
 const __dirname1 = path.resolve();
