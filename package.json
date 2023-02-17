@@ -21,6 +21,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.1",
     "request": "^2.88.2",
+    "shuffle-array": "^1.0.1",
     "socket.io": "^4.6.0"
   },
   "devDependencies": {

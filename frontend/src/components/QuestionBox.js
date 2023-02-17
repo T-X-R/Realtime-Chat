@@ -1,6 +1,18 @@
-import { Box, Button, Input, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Input,
+  useToast,
+  Stack,
+  Text,
+  Card,
+  CardBody,
+  Badge,
+  Radio,
+  RadioGroup,
+} from "@chakra-ui/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChatState } from "../context/ChatProvider";
 
 const QuestionBox = () => {
@@ -8,10 +20,44 @@ const QuestionBox = () => {
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState();
   const [uploadFile, setUploadFile] = useState();
+  const [fetchAgain, setFetchAgain] = useState(false);
 
   const toast = useToast();
 
-  const uploadHandler = async(f) => {
+  const fetchQuestions = async () => {
+    setLoading(true);
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      const { data } = await axios.get("/api/file", config);
+      if (data.length === 0) {
+        return;
+      }
+      console.log(data);
+      setFile(data);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error Occured",
+        description: "Failed to Load Questions",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, [fetchAgain]);
+
+  const uploadHandler = (f) => {
     setLoading(true);
     if (!f) {
       toast({
@@ -23,7 +69,7 @@ const QuestionBox = () => {
       });
       return;
     }
-    // setFile(f)
+
     const data = new FormData();
     data.append("file", f);
     data.append("upload_preset", "My project");
@@ -45,7 +91,7 @@ const QuestionBox = () => {
 
   const csvHandler = async () => {
     setLoading(true);
-    console.log(uploadFile);
+    // console.log(uploadFile);
     if (!uploadFile) {
       toast({
         title: "Please Select a CSV File",
@@ -73,18 +119,28 @@ const QuestionBox = () => {
         },
         config
       );
-
-      toast({
-        title: "Upload Successful",
-        status: "success",
-        duration: 5000,
-        isClosable: true,
-        position: "top",
-      });
-      
-      // setPic([data, ...pic])
-      // setFetchAgain(!fetchAgain)
-      setLoading(false);
+      console.log(data);
+      if (data) {
+        toast({
+          title: "Save Data Successful",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+          position: "top",
+        });
+        setFetchAgain(!fetchAgain);
+        setLoading(false);
+      } else {
+        toast({
+          title: "Error Occured",
+          description: "Failed to Save Data",
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+          position: "top",
+        });
+        setLoading(false);
+      }
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -145,22 +201,49 @@ const QuestionBox = () => {
           marginTop={3}
           borderRadius="lg"
           overflowY="hidden"
+          fontFamily="Work sans"
         >
-          {/* {pic ? (
+          {file ? (
             <Stack overflowY="scroll">
-              {pic.map((p) => (
-                <Image
-                  src={p.images}
-                  className="rounded img-thumbnail"
-                  width="100%"
-                  height="auto"
-                  key={p._id}
-                />
+              {file.map((fi) => (
+                <Card key={fi._id}>
+                  <CardBody>
+                    <Box display="flex" w="100%" alignItems="baseline">
+                      <Badge
+                        borderRadius="full"
+                        px="3"
+                        variant="subtle"
+                        colorScheme="teal"
+                      >
+                        {fi.level}
+                      </Badge>
+                      <Text marginLeft={3}>{fi.text}</Text>
+                    </Box>
+                    <RadioGroup ml={5} mt={1}>
+                      <Stack>
+                        {fi.answers.map((a, i) => (
+                          <Radio key={i} value={a}>
+                            {a}
+                          </Radio>
+                        ))}
+                      </Stack>
+                    </RadioGroup>
+                  </CardBody>
+                </Card>
               ))}
             </Stack>
           ) : (
-            <>Don't have pictures</>
-          )} */}
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              h="100%"
+            >
+              <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+                Don't have questions
+              </Text>
+            </Box>
+          )}
         </Box>
       </Box>
     </>

@@ -1,5 +1,12 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, Image, Input, Stack, useToast } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Image,
+  Input,
+  Stack,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../context/ChatProvider";
@@ -14,6 +21,7 @@ const MyGallery = () => {
   const toast = useToast();
 
   const fetchPics = async () => {
+    setLoading(true);
     try {
       const config = {
         headers: {
@@ -22,8 +30,12 @@ const MyGallery = () => {
       };
 
       const { data } = await axios.get("/api/item", config);
-    //   console.log(pic);
+      if(data.length === 0) {
+        return;
+      }
+      console.log(data)
       setPic(data);
+      setLoading(false);
     } catch (error) {
       toast({
         title: "Error Occured",
@@ -33,6 +45,7 @@ const MyGallery = () => {
         isClosable: true,
         position: "top",
       });
+      setLoading(false);
     }
   };
 
@@ -120,9 +133,9 @@ const MyGallery = () => {
         isClosable: true,
         position: "top",
       });
-    //   console.log(data);
-      setPic([data, ...pic])
-      setFetchAgain(!fetchAgain)
+      //   console.log(data);
+      setPic([data, ...pic]);
+      setFetchAgain(!fetchAgain);
       setLoading(false);
     } catch (error) {
       toast({
@@ -198,7 +211,16 @@ const MyGallery = () => {
               ))}
             </Stack>
           ) : (
-            <>Don't have pictures</>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              h="100%"
+            >
+              <Text fontSize="3xl" pb={3} fontFamily="Work sans">
+                Don't have pictures
+              </Text>
+            </Box>
           )}
         </Box>
       </Box>
