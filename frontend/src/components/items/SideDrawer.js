@@ -62,6 +62,8 @@ const SideDrawer = () => {
 
   // search users
   const searchHandler = async () => {
+
+    // console.log(search)
     if (!search) {
       toast({
         title: "Invalid search",
@@ -84,7 +86,7 @@ const SideDrawer = () => {
       const { data } = await axios.get(`/api/user?search=${search}`, config);
       setLoading(false);
       setSearchRes(data);
-      //   console.log(searchRes)
+      // console.log(data)
     } catch (error) {
       toast({
         title: "Error Occured",
