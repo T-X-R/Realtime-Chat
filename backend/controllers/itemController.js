@@ -23,7 +23,7 @@ const imgUpload = asyncHandler(async (req, res) => {
 
 const allPictures = asyncHandler(async (req, res) => {
   try {
-    result = await Item.find({ owner: req.user._id }).sort({ updatedAt: -1 }).select("images");
+    const result = await Item.find({ owner: req.user._id }).sort({ updatedAt: -1 }).select("images");
     // console.log(result);
     res.status(200).send(result);
   } catch (error) {

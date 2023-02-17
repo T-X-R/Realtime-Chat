@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
+const Chat = require("../models/chatModel");
 
 const userRegister = asyncHandler(async (req, res) => {
   const { name, password, pic } = req.body;
@@ -68,4 +69,34 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
-module.exports = { userRegister, userAuth, allUsers };
+// delete user and chats belongs to the user
+const delUser = asyncHandler(async (req, res) => {
+  const { user } = req.body;
+  const chats = await Chat.find({
+    users: { $elemMatch: { $eq: user._id } },
+  }).select("_id isGroupChat users");
+  if (chats) {
+    // console.log(chats);
+    for (let i = 0; i < chats.length; i++) {
+      if (chats[i].isGroupChat) {
+        await Chat.findByIdAndUpdate(
+          chats[i]._id,
+          {
+            $pull: { users: user._id },
+          },
+          {
+            new: true,
+          }
+        );
+      } else {
+        await Chat.deleteOne({ _id: chats[i]._id });
+      }
+    }
+  }
+
+  const del = await User.deleteOne({ _id: user._id });
+  console.log(del);
+  res.status(200).send("done");
+});
+
+module.exports = { userRegister, userAuth, allUsers, delUser };

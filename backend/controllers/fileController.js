@@ -47,7 +47,7 @@ const fileUpload = asyncHandler(async (req, res) => {
 
 const allFiles = asyncHandler(async (req, res) => {
   try {
-    result = await File.find({ owner: req.user._id })
+    const result = await File.find({ owner: req.user._id })
       .sort({ updatedAt: -1 })
       .select("text correctAnswer wrongAnswers answers level");
     // console.log(result);
