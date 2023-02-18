@@ -1,4 +1,4 @@
-# Coding Challenge Overview
+# Project Overview
 
 This project is implemented by using node.js, React and MongoDB. This project supports user login/registration with authentication, images upload and reprensent, csv files upload and reprensent, real time chat and other basic features.
 
