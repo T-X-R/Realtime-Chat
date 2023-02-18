@@ -8,7 +8,7 @@ Main data (like users metadata) are stored in MongoDB. Image and csv files are s
 
 ## Usage
 
-<p> Login to the platfomr or registration. Then you can begin to chat with someone.</p>
+<p> Login to the platform or registration. Then you can begin to chat with someone.</p>
 
 <p>If you want to upload some images or files, you can click your avatar on right-top of the screen and select "My Gallery".</p>
 
