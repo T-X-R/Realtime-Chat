@@ -12,7 +12,3 @@ Main data (like users metadata) are stored in MongoDB. Image and csv files are s
 
 <p>If you want to upload some images or files, you can click your avatar on right-top of the screen and select "My Gallery".</p>
 
-## Deployment
-
-This project is deployed on Heroku. Feel free to try my [project](https://xiaoran-project.herokuapp.com/)!
-
